@@ -6,91 +6,178 @@
 <title>Lagos Mini Life</title>
 <style>
   :root {
-    --bg: #0f1419;
-    --panel: #1a2332;
-    --accent: #00c853;
-    --accent2: #ff6d00;
-    --text: #e8eef7;
-    --muted: #8b9bb4;
+    --bg: #0c1017;
+    --panel: #151c28;
+    --card: #1e2a3a;
+    --border: #2a3748;
+    --text: #eef3f9;
+    --muted: #8b9cb3;
+    --accent: #00e676;
+    --accent-dim: #00c853;
+    --orange: #ff9100;
     --danger: #ff5252;
-    --card: #243044;
-    --border: #2d3a4f;
+    --purple: #b388ff;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
     overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
   }
   .hidden { display: none !important; }
+
+  /* ========== START SCREEN ========== */
   #start-screen {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    background: linear-gradient(160deg, #0f1419 0%, #1a2a3a 50%, #0d1f2d 100%);
+    padding: 24px 20px;
+    background: radial-gradient(ellipse at 50% 0%, #1a2a3a 0%, #0c1017 60%);
   }
   #start-screen h1 {
-    font-size: 2.4rem;
-    margin-bottom: 8px;
-    background: linear-gradient(90deg, #00c853, #69f0ae);
+    font-size: 2.1rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #00e676, #69f0ae);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    margin-bottom: 6px;
   }
-  #start-screen p { color: var(--muted); margin-bottom: 24px; text-align: center; max-width: 360px; }
-  .input-group { margin-bottom: 16px; width: 100%; max-width: 320px; }
-  .input-group label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; }
-  input[type="text"] {
+  .tagline {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 28px;
+    text-align: center;
+  }
+  .auth-card {
     width: 100%;
-    padding: 12px 14px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
+    max-width: 360px;
     background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px 20px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+  .tabs {
+    display: flex;
+    background: var(--card);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 22px;
+  }
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab.active {
+    background: var(--accent);
+    color: #003d1a;
+  }
+  .input-group {
+    margin-bottom: 14px;
+  }
+  .input-group label {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 13px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--card);
     color: var(--text);
     font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
   }
+  input:focus { border-color: var(--accent); }
   .btn {
+    width: 100%;
     background: var(--accent);
-    color: #000;
+    color: #003d1a;
     border: none;
-    padding: 14px 28px;
-    border-radius: 12px;
+    padding: 15px;
+    border-radius: 14px;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 1.05rem;
     cursor: pointer;
+    margin-top: 8px;
     transition: transform 0.15s, opacity 0.15s;
   }
-  .btn:hover { transform: scale(1.03); }
-  .btn:active { transform: scale(0.98); }
+  .btn:active { transform: scale(0.97); }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-  .btn-secondary { background: var(--card); color: var(--text); border: 1px solid var(--border); }
-  .btn-danger { background: var(--danger); color: #fff; }
-  .btn-sm { padding: 8px 14px; font-size: 0.85rem; border-radius: 8px; }
+  .error-msg {
+    color: var(--danger);
+    font-size: 0.82rem;
+    margin-top: 12px;
+    text-align: center;
+    min-height: 20px;
+  }
+  .footer-note {
+    margin-top: 20px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* ========== GAME ========== */
   #game {
     display: flex;
     flex-direction: column;
     height: 100vh;
     max-width: 480px;
     margin: 0 auto;
+    background: var(--bg);
   }
   header {
     background: var(--panel);
-    padding: 10px 14px;
+    padding: 12px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
   }
-  .money { font-weight: 700; color: var(--accent); font-size: 1.1rem; }
-  .day-info { font-size: 0.85rem; color: var(--muted); text-align: right; }
+  .money {
+    font-weight: 800;
+    color: var(--accent);
+    font-size: 1.25rem;
+  }
+  .job-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+  .day-info {
+    text-align: right;
+    font-size: 0.85rem;
+  }
+  .rent-warn {
+    font-size: 0.72rem;
+    color: var(--orange);
+    margin-top: 2px;
+  }
+
+  /* Needs */
   .needs-bar {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 6px;
     padding: 10px 12px;
     background: var(--panel);
@@ -99,85 +186,96 @@
   }
   .need {
     background: var(--card);
-    border-radius: 8px;
-    padding: 6px 8px;
-    font-size: 0.75rem;
+    border-radius: 10px;
+    padding: 7px 6px;
+    text-align: center;
   }
-  .need-label { display: flex; justify-content: space-between; margin-bottom: 3px; color: var(--muted); }
+  .need-name {
+    font-size: 0.65rem;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .need-val {
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
   .need-fill {
-    height: 6px;
-    border-radius: 3px;
-    background: #333;
+    height: 4px;
+    background: #2a3545;
+    border-radius: 2px;
+    margin-top: 4px;
     overflow: hidden;
   }
   .need-fill > div {
     height: 100%;
-    border-radius: 3px;
-    transition: width 0.3s;
+    border-radius: 2px;
+    transition: width 0.35s;
   }
+
+  /* Map - denser card grid */
   .map-area {
     flex: 1;
-    position: relative;
-    overflow: hidden;
-    background: #15202b;
+    overflow-y: auto;
+    padding: 12px;
+    background: #0f1520;
   }
-  #city-map {
-    width: 100%;
-    height: 100%;
-    position: relative;
+  .places-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
-  .place {
-    position: absolute;
-    width: 56px;
-    height: 56px;
-    border-radius: 14px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: transform 0.15s, border-color 0.15s;
+  .place-card {
     background: var(--card);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 12px;
+    cursor: pointer;
+    transition: all 0.18s;
+    position: relative;
   }
-  .place:hover, .place.selected { border-color: var(--accent); transform: scale(1.08); }
-  .place-name {
-    font-size: 0.55rem;
-    color: var(--muted);
-    margin-top: 2px;
-    text-align: center;
-    line-height: 1.1;
-    max-width: 52px;
+  .place-card.selected {
+    border-color: var(--accent);
+    background: #1a2f28;
+    box-shadow: 0 0 0 1px var(--accent);
   }
-  .player-token, .npc-token {
+  .place-card .emoji {
+    font-size: 1.6rem;
+    margin-bottom: 4px;
+  }
+  .place-card .name {
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .place-card .players-here {
     position: absolute;
-    width: 28px;
-    height: 28px;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    gap: 2px;
+  }
+  .place-card .players-here span {
+    font-size: 0.85rem;
+    background: rgba(0,0,0,0.35);
     border-radius: 50%;
+    width: 22px;
+    height: 22px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.9rem;
-    z-index: 10;
-    transition: left 0.8s ease, top 0.8s ease;
-    border: 2px solid #fff;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
   }
-  .player-token { background: var(--accent); z-index: 20; }
-  .npc-token { background: #5c6bc0; }
+
+  /* Action panel */
   .action-panel {
     background: var(--panel);
     border-top: 1px solid var(--border);
-    padding: 12px;
+    padding: 14px 14px 18px;
     flex-shrink: 0;
-    max-height: 42vh;
+    max-height: 46vh;
     overflow-y: auto;
   }
   .action-panel h3 {
-    font-size: 0.95rem;
-    margin-bottom: 8px;
+    font-size: 1rem;
+    margin-bottom: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -185,55 +283,69 @@
   .actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 9px;
   }
   .action-btn {
     background: var(--card);
     border: 1px solid var(--border);
     color: var(--text);
-    padding: 10px;
-    border-radius: 10px;
-    font-size: 0.8rem;
+    padding: 12px 10px;
+    border-radius: 14px;
+    font-size: 0.82rem;
     cursor: pointer;
     text-align: left;
     transition: background 0.15s;
   }
-  .action-btn:hover:not(:disabled) { background: #2d3f5a; }
+  .action-btn:active:not(:disabled) { background: #2a3b52; }
   .action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  .action-btn .cost { color: var(--accent2); font-size: 0.75rem; }
-  .action-btn .effect { color: var(--muted); font-size: 0.7rem; }
-  .log {
-    margin-top: 10px;
-    background: var(--card);
-    border-radius: 8px;
-    padding: 8px 10px;
+  .action-btn .cost {
+    display: block;
+    color: var(--orange);
     font-size: 0.75rem;
+    margin-top: 3px;
+  }
+  .action-btn .effect {
+    display: block;
     color: var(--muted);
-    max-height: 80px;
+    font-size: 0.7rem;
+    margin-top: 2px;
+  }
+  .log {
+    margin-top: 12px;
+    background: var(--card);
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 0.78rem;
+    color: var(--muted);
+    max-height: 72px;
     overflow-y: auto;
   }
   .log div { margin-bottom: 3px; }
+
+  /* Toast & Modals */
   .toast {
     position: fixed;
-    bottom: 20px;
+    bottom: 24px;
     left: 50%;
     transform: translateX(-50%);
     background: var(--accent);
-    color: #000;
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-weight: 600;
+    color: #003d1a;
+    padding: 12px 22px;
+    border-radius: 30px;
+    font-weight: 700;
     font-size: 0.9rem;
     z-index: 100;
     opacity: 0;
     transition: opacity 0.3s;
     pointer-events: none;
+    max-width: 90%;
+    text-align: center;
   }
   .toast.show { opacity: 1; }
   .modal {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0,0,0,0.75);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -242,250 +354,284 @@
   }
   .modal-content {
     background: var(--panel);
-    border-radius: 16px;
+    border-radius: 20px;
     padding: 24px;
     max-width: 340px;
     width: 100%;
     border: 1px solid var(--border);
   }
-  .modal-content h2 { margin-bottom: 12px; font-size: 1.3rem; }
-  .modal-content p { color: var(--muted); margin-bottom: 16px; font-size: 0.9rem; line-height: 1.4; }
+  .modal-content h2 { margin-bottom: 10px; font-size: 1.3rem; }
+  .modal-content p { color: var(--muted); margin-bottom: 16px; font-size: 0.9rem; line-height: 1.45; }
+  .btn-secondary {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
   .stat-row {
     display: flex;
     justify-content: space-between;
-    padding: 6px 0;
+    padding: 8px 0;
     border-bottom: 1px solid var(--border);
     font-size: 0.9rem;
-  }
-  .players-list {
-    max-height: 120px;
-    overflow-y: auto;
-    margin: 8px 0;
-  }
-  .player-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 0;
-    font-size: 0.85rem;
-  }
-  .player-dot {
-    width: 10px; height: 10px; border-radius: 50%;
   }
 </style>
 </head>
 <body>
-  <!-- START SCREEN -->
-  <div id="start-screen">
-    <h1>Lagos Mini Life</h1>
-    <p>A tiny multiplayer-style life sim. Earn ₦, manage needs, work, hang out, and survive rent day.</p>
+
+<!-- ========== START SCREEN ========== -->
+<div id="start-screen">
+  <h1>Lagos Mini Life</h1>
+  <p class="tagline">Survive rent. Hustle. Live Lagos.</p>
+
+  <div class="auth-card">
+    <div class="tabs">
+      <div class="tab active" id="tab-login" onclick="switchTab('login')">Login</div>
+      <div class="tab" id="tab-register" onclick="switchTab('register')">Register</div>
+    </div>
+
     <div class="input-group">
-      <label>Your name</label>
-      <input type="text" id="player-name" placeholder="e.g. Tunde" maxlength="16" value="">
+      <label>Username</label>
+      <input type="text" id="username" placeholder="e.g. Tunde" maxlength="16" autocomplete="username">
     </div>
-    <button class="btn" id="start-btn" onclick="startGame()">Enter Lagos</button>
-    <p style="margin-top:20px;font-size:0.75rem;color:var(--muted)">No account needed · Local + AI players · In-game ₦ only</p>
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="••••••" maxlength="32" autocomplete="current-password">
+    </div>
+    <div class="input-group hidden" id="confirm-group">
+      <label>Confirm Password</label>
+      <input type="password" id="confirm-password" placeholder="••••••" maxlength="32">
+    </div>
+
+    <button class="btn" id="auth-btn" onclick="handleAuth()">Enter Lagos</button>
+    <div class="error-msg" id="auth-error"></div>
   </div>
 
-  <!-- GAME -->
-  <div id="game" class="hidden">
-    <header>
-      <div>
-        <div class="money" id="money-display">₦0</div>
-        <div style="font-size:0.75rem;color:var(--muted)" id="job-display">Unemployed</div>
-      </div>
-      <div class="day-info">
-        <div id="day-display">Day 1 · Mon</div>
-        <div id="time-display">08:00</div>
-        <div style="font-size:0.7rem;color:var(--accent2)" id="rent-warning"></div>
-      </div>
-    </header>
+  <p class="footer-note">Progress is saved · No email needed</p>
+</div>
 
-    <div class="needs-bar" id="needs-bar"></div>
-
-    <div class="map-area">
-      <div id="city-map"></div>
+<!-- ========== GAME ========== -->
+<div id="game" class="hidden">
+  <header>
+    <div>
+      <div class="money" id="money-display">₦0</div>
+      <div class="job-label" id="job-display">Unemployed</div>
     </div>
-
-    <div class="action-panel">
-      <h3>
-        <span id="location-title">Select a place</span>
-        <button class="btn btn-sm btn-secondary" onclick="showPlayers()">Players</button>
-      </h3>
-      <div class="actions" id="actions"></div>
-      <div class="log" id="log"></div>
+    <div class="day-info">
+      <div id="day-display">Day 1 · Mon</div>
+      <div id="time-display">08:00</div>
+      <div class="rent-warn" id="rent-warning">Rent in 3 days</div>
     </div>
+  </header>
+
+  <div class="needs-bar" id="needs-bar"></div>
+
+  <div class="map-area">
+    <div class="places-grid" id="places-grid"></div>
   </div>
 
-  <div class="toast" id="toast"></div>
-
-  <!-- Players modal -->
-  <div id="players-modal" class="modal hidden">
-    <div class="modal-content">
-      <h2>In the city</h2>
-      <div class="players-list" id="players-list"></div>
-      <button class="btn btn-secondary" style="width:100%;margin-top:12px" onclick="closeModal('players-modal')">Close</button>
-    </div>
+  <div class="action-panel">
+    <h3>
+      <span id="location-title">Select a place</span>
+      <button class="btn btn-secondary" style="width:auto;padding:7px 12px;font-size:0.8rem;margin:0" onclick="showPlayers()">Players</button>
+    </h3>
+    <div class="actions" id="actions"></div>
+    <div class="log" id="log"></div>
   </div>
+</div>
 
-  <!-- Game over modal -->
-  <div id="gameover-modal" class="modal hidden">
-    <div class="modal-content">
-      <h2 id="go-title">Game Over</h2>
-      <p id="go-msg"></p>
-      <div id="go-stats"></div>
-      <button class="btn" style="width:100%;margin-top:16px" onclick="location.reload()">Play Again</button>
-    </div>
+<div class="toast" id="toast"></div>
+
+<!-- Players Modal -->
+<div id="players-modal" class="modal hidden">
+  <div class="modal-content">
+    <h2>People in the city</h2>
+    <div id="players-list" style="max-height:220px;overflow-y:auto;margin:12px 0"></div>
+    <button class="btn btn-secondary" style="width:100%" onclick="closeModal('players-modal')">Close</button>
   </div>
+</div>
 
+<!-- Game Over -->
+<div id="gameover-modal" class="modal hidden">
+  <div class="modal-content">
+    <h2 id="go-title">Game Over</h2>
+    <p id="go-msg"></p>
+    <div id="go-stats"></div>
+    <button class="btn" style="width:100%;margin-top:16px" onclick="location.reload()">Play Again</button>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
 <script>
-// ========== DATA ==========
-const PLACES = [
-  { id: 'home', name: 'Your Room', emoji: '🏠', x: 12, y: 70, actions: ['sleep','cook','shower','rest'] },
-  { id: 'market', name: 'Balogun', emoji: '🛒', x: 40, y: 25, actions: ['shop_food','hangout'] },
-  { id: 'office', name: 'Victoria Island', emoji: '🏢', x: 72, y: 20, actions: ['work','apply_job'] },
-  { id: 'amala', name: 'Amala Spot', emoji: '🍲', x: 25, y: 45, actions: ['eat_out','hangout'] },
-  { id: 'beach', name: 'Elegushi', emoji: '🏖️', x: 80, y: 55, actions: ['party','hangout','rest'] },
-  { id: 'church', name: 'Church', emoji: '⛪', x: 55, y: 75, actions: ['pray','hangout'] },
-  { id: 'club', name: 'Quilox', emoji: '🎉', x: 65, y: 40, actions: ['party','hangout'] },
-  { id: 'garage', name: 'Okada Stand', emoji: '🛵', x: 18, y: 18, actions: ['gig_okada','hangout'] },
-];
+// ========== AUTH TABS ==========
+let currentTab = 'login';
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+  document.getElementById('confirm-group').classList.toggle('hidden', tab === 'login');
+  document.getElementById('auth-error').textContent = '';
+  document.getElementById('auth-btn').textContent = tab === 'login' ? 'Enter Lagos' : 'Create Account';
+}
 
-const ACTIONS = {
-  sleep:     { label: 'Sleep', cost: 0, duration: 6, effects: { energy: 70, hunger: -15, hygiene: -10 }, msg: 'You slept. Feeling better.' },
-  cook:      { label: 'Cook & Eat', cost: 800, duration: 1, effects: { hunger: 50, energy: -5 }, msg: 'Home food hits different.' },
-  shower:    { label: 'Shower', cost: 0, duration: 0.5, effects: { hygiene: 60 }, msg: 'Fresh and clean.' },
-  rest:      { label: 'Rest a bit', cost: 0, duration: 1, effects: { energy: 20, fun: 5 }, msg: 'You took a short break.' },
-  shop_food: { label: 'Buy groceries', cost: 2500, duration: 1, effects: { hunger: 10 }, msg: 'Stocked up on food.' },
-  eat_out:   { label: 'Chop amala', cost: 1500, duration: 1, effects: { hunger: 55, fun: 15, energy: -5 }, msg: 'Amala + ewedu. Blessed.' },
-  work:      { label: 'Work a shift', cost: 0, duration: 4, effects: { energy: -35, fun: -20, social: -10, hygiene: -15 }, pay: true, msg: 'Shift done. Pay received.' },
-  apply_job: { label: 'Look for work', cost: 0, duration: 1, effects: { energy: -10 }, special: 'job', msg: 'You asked around for openings.' },
-  hangout:   { label: 'Hang with people', cost: 500, duration: 1.5, effects: { social: 40, fun: 25, energy: -10 }, msg: 'Good vibes with the people.' },
-  party:     { label: 'Party', cost: 5000, duration: 3, effects: { fun: 60, social: 30, energy: -40, hygiene: -20, hunger: -15 }, msg: 'Night was wild.' },
-  pray:      { label: 'Pray / Reflect', cost: 0, duration: 1, effects: { fun: 15, energy: 10, social: 10 }, msg: 'Peace of mind.' },
-  gig_okada: { label: 'Okada gig', cost: 0, duration: 2, effects: { energy: -25, hygiene: -15, fun: -5 }, pay: 'okada', msg: 'You rode for hours. Cash in hand.' },
-};
-
-const JOBS = [
-  { id: 'none', name: 'Unemployed', pay: 0, level: 0 },
-  { id: 'okada', name: 'Okada Rider', pay: 4500, level: 1 },
-  { id: 'sales', name: 'Shop Attendant', pay: 7000, level: 2 },
-  { id: 'office', name: 'Office Assistant', pay: 12000, level: 3 },
-  { id: 'manager', name: 'Team Lead', pay: 22000, level: 4 },
-];
-
-const NPC_NAMES = ['Chioma','Emeka','Funke','Bola','Ada','Kemi','Segun','Ngozi','Tobi','Yemi','Ife','Damilola'];
-const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-
-// ========== STATE ==========
+// ========== SOCKET + STATE ==========
+const socket = io();
 let state = {
   name: '',
-  money: 15000,
-  job: JOBS[0],
+  money: 0,
+  job: { id: 'none', name: 'Unemployed', pay: 0 },
   day: 1,
   hour: 8,
   minute: 0,
   needs: { hunger: 70, energy: 80, fun: 50, social: 40, hygiene: 60 },
   location: 'home',
-  rentDue: 3, // days until rent
+  rentDue: 3,
   rentAmount: 8000,
-  inventory: { food: 2 },
+  players: [],
   log: [],
-  busyUntil: 0,
-  npcs: [],
-  gameOver: false,
+  busy: false
 };
 
-// ========== INIT ==========
-function startGame() {
-  const name = document.getElementById('player-name').value.trim() || 'Player';
-  state.name = name;
+const PLACES = [
+  { id: 'home',   name: 'Your Room',      emoji: '🏠', actions: ['sleep','cook','shower','rest'] },
+  { id: 'market', name: 'Balogun Market', emoji: '🛒', actions: ['shop_food','hangout'] },
+  { id: 'office', name: 'Victoria Island',emoji: '🏢', actions: ['work','apply_job'] },
+  { id: 'amala',  name: 'Amala Spot',     emoji: '🍲', actions: ['eat_out','hangout'] },
+  { id: 'beach',  name: 'Elegushi Beach', emoji: '🏖️', actions: ['party','hangout','rest'] },
+  { id: 'church', name: 'Church',         emoji: '⛪', actions: ['pray','hangout'] },
+  { id: 'club',   name: 'Quilox',         emoji: '🎉', actions: ['party','hangout'] },
+  { id: 'garage', name: 'Okada Stand',    emoji: '🛵', actions: ['gig_okada','hangout'] },
+];
+
+const ACTIONS = {
+  sleep:     { label: 'Sleep',          cost: 0,    duration: '6h',  effects: '+70 energy' },
+  cook:      { label: 'Cook & Eat',     cost: 800,  duration: '1h',  effects: '+50 hunger' },
+  shower:    { label: 'Shower',         cost: 0,    duration: '30m', effects: '+60 hygiene' },
+  rest:      { label: 'Rest a bit',     cost: 0,    duration: '1h',  effects: '+20 energy, +5 fun' },
+  shop_food: { label: 'Buy groceries',  cost: 2500, duration: '1h',  effects: '+10 hunger' },
+  eat_out:   { label: 'Chop amala',     cost: 1500, duration: '1h',  effects: '+55 hunger, +15 fun' },
+  work:      { label: 'Work a shift',   cost: 0,    duration: '4h',  effects: 'Earn salary' },
+  apply_job: { label: 'Look for work',  cost: 0,    duration: '1h',  effects: 'Chance of job' },
+  hangout:   { label: 'Hang with people',cost: 500, duration: '1.5h',effects: '+40 social, +25 fun' },
+  party:     { label: 'Party hard',     cost: 5000, duration: '3h',  effects: '+60 fun, +30 social' },
+  pray:      { label: 'Pray / Reflect', cost: 0,    duration: '1h',  effects: '+15 fun, +10 energy' },
+  gig_okada: { label: 'Okada gig',      cost: 0,    duration: '2h',  effects: 'Earn ₦2k–4.5k' },
+};
+
+const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+// ========== AUTH ==========
+function handleAuth() {
+  const name = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+  const confirm = document.getElementById('confirm-password').value;
+  const err = document.getElementById('auth-error');
+
+  if (name.length < 2) return err.textContent = 'Username must be at least 2 characters';
+  if (password.length < 3) return err.textContent = 'Password must be at least 3 characters';
+  if (currentTab === 'register' && password !== confirm) return err.textContent = 'Passwords do not match';
+
+  err.textContent = '';
+  document.getElementById('auth-btn').disabled = true;
+  document.getElementById('auth-btn').textContent = 'Entering...';
+
+  socket.emit('join', { name, password });
+}
+
+socket.on('error_msg', (msg) => {
+  document.getElementById('auth-error').textContent = msg;
+  document.getElementById('auth-btn').disabled = false;
+  document.getElementById('auth-btn').textContent = currentTab === 'login' ? 'Enter Lagos' : 'Create Account';
+});
+
+socket.on('joined', (data) => {
+  state.name = data.you.name;
+  state.money = data.you.money;
+  state.job = data.you.job || { id: 'none', name: 'Unemployed', pay: 0 };
+  state.location = data.you.location || 'home';
+  state.needs = data.you.needs || state.needs;
+
   document.getElementById('start-screen').classList.add('hidden');
   document.getElementById('game').classList.remove('hidden');
-  initNPCs();
-  renderMap();
-  renderNeeds();
-  renderActions();
-  updateHeader();
-  addLog(`Welcome to Lagos, ${name}. You have ₦${state.money.toLocaleString()}. Rent is ₦${state.rentAmount.toLocaleString()} in ${state.rentDue} days.`);
-  // Game loop
-  setInterval(tick, 2000); // every 2 real sec ≈ 10 game min
-  setInterval(npcTick, 4000);
-}
+  renderAll();
+  addLog(`Welcome to Lagos, ${state.name}. Rent is ₦${state.rentAmount.toLocaleString()}. Hustle hard.`);
+});
 
-function initNPCs() {
-  const used = new Set();
-  for (let i = 0; i < 6; i++) {
-    let n;
-    do { n = NPC_NAMES[Math.floor(Math.random()*NPC_NAMES.length)]; } while (used.has(n));
-    used.add(n);
-    const place = PLACES[Math.floor(Math.random()*PLACES.length)];
-    state.npcs.push({
-      id: i,
-      name: n,
-      money: 5000 + Math.floor(Math.random()*30000),
-      location: place.id,
-      emoji: ['😎','🥰','😤','🥳','😌','🤔'][i],
-    });
+// ========== CITY UPDATES ==========
+socket.on('city_update', (data) => {
+  state.players = data.players || [];
+  state.day = data.day || state.day;
+  state.hour = data.hour ?? state.hour;
+  state.minute = data.minute ?? state.minute;
+  renderMap();
+  updateHeader();
+});
+
+socket.on('action_result', (res) => {
+  if (res.money !== undefined) state.money = res.money;
+  if (res.needs) state.needs = res.needs;
+  if (res.job) state.job = res.job;
+  if (res.location) state.location = res.location;
+  if (res.msg) {
+    addLog(res.msg);
+    toast(res.msg);
   }
-}
+  state.busy = false;
+  renderAll();
+});
 
 // ========== RENDER ==========
-function renderMap() {
-  const map = document.getElementById('city-map');
-  map.innerHTML = '';
-  PLACES.forEach(p => {
-    const el = document.createElement('div');
-    el.className = 'place' + (state.location === p.id ? ' selected' : '');
-    el.style.left = p.x + '%';
-    el.style.top = p.y + '%';
-    el.style.transform = 'translate(-50%, -50%)';
-    el.innerHTML = `${p.emoji}<div class="place-name">${p.name}</div>`;
-    el.onclick = () => selectPlace(p.id);
-    map.appendChild(el);
-  });
-  // Player token
-  const playerPlace = PLACES.find(p => p.id === state.location);
-  if (playerPlace) {
-    const tok = document.createElement('div');
-    tok.className = 'player-token';
-    tok.style.left = `calc(${playerPlace.x}% - 4px)`;
-    tok.style.top = `calc(${playerPlace.y}% + 18px)`;
-    tok.textContent = '🙂';
-    tok.title = state.name;
-    map.appendChild(tok);
-  }
-  // NPCs
-  state.npcs.forEach(npc => {
-    const pl = PLACES.find(p => p.id === npc.location);
-    if (!pl) return;
-    const tok = document.createElement('div');
-    tok.className = 'npc-token';
-    // slight offset so they don't stack perfectly
-    const ox = (npc.id % 3 - 1) * 12;
-    const oy = (Math.floor(npc.id / 3) - 0.5) * 10;
-    tok.style.left = `calc(${pl.x}% + ${ox}px)`;
-    tok.style.top = `calc(${pl.y}% + ${18 + oy}px)`;
-    tok.textContent = npc.emoji;
-    tok.title = npc.name;
-    map.appendChild(tok);
-  });
+function renderAll() {
+  updateHeader();
+  renderNeeds();
+  renderMap();
+  renderActions();
+}
+
+function updateHeader() {
+  document.getElementById('money-display').textContent = '₦' + Number(state.money).toLocaleString();
+  document.getElementById('job-display').textContent = state.job.name || 'Unemployed';
+  document.getElementById('day-display').textContent = `Day ${state.day} · ${DAYS[(state.day-1)%7]}`;
+  const h = String(Math.floor(state.hour)).padStart(2,'0');
+  const m = String(Math.floor(state.minute)).padStart(2,'0');
+  document.getElementById('time-display').textContent = `${h}:${m}`;
+  const rentEl = document.getElementById('rent-warning');
+  if (state.rentDue <= 1) rentEl.textContent = `⚠ Rent ₦${state.rentAmount.toLocaleString()} due!`;
+  else rentEl.textContent = `Rent in ${state.rentDue} days`;
 }
 
 function renderNeeds() {
   const bar = document.getElementById('needs-bar');
   const labels = { hunger: 'Hunger', energy: 'Energy', fun: 'Fun', social: 'Social', hygiene: 'Hygiene' };
-  const colors = { hunger: '#ff9800', energy: '#2196f3', fun: '#e91e63', social: '#9c27b0', hygiene: '#00bcd4' };
+  const colors = { hunger: '#ff9800', energy: '#42a5f5', fun: '#ec407a', social: '#ab47bc', hygiene: '#26c6da' };
   bar.innerHTML = '';
   for (const [k, v] of Object.entries(state.needs)) {
-    const pct = Math.max(0, Math.min(100, v));
+    const pct = Math.max(0, Math.min(100, Math.round(v)));
     const col = pct < 25 ? 'var(--danger)' : colors[k];
     bar.innerHTML += `
       <div class="need">
-        <div class="need-label"><span>${labels[k]}</span><span>${Math.round(pct)}</span></div>
+        <div class="need-name">${labels[k]}</div>
+        <div class="need-val" style="color:${col}">${pct}</div>
         <div class="need-fill"><div style="width:${pct}%;background:${col}"></div></div>
       </div>`;
   }
+}
+
+function renderMap() {
+  const grid = document.getElementById('places-grid');
+  grid.innerHTML = '';
+  PLACES.forEach(p => {
+    const here = state.players.filter(pl => pl.location === p.id);
+    const isMe = state.location === p.id;
+    const card = document.createElement('div');
+    card.className = 'place-card' + (isMe ? ' selected' : '');
+    card.innerHTML = `
+      <div class="emoji">${p.emoji}</div>
+      <div class="name">${p.name}</div>
+      <div class="players-here">${here.slice(0,3).map(pl => `<span title="${pl.name}">${pl.emoji || '🙂'}</span>`).join('')}</div>
+    `;
+    card.onclick = () => selectPlace(p.id);
+    grid.appendChild(card);
+  });
 }
 
 function renderActions() {
@@ -495,12 +641,11 @@ function renderActions() {
   container.innerHTML = '';
   if (!place) return;
 
-  // Travel buttons to other places
-  const others = PLACES.filter(p => p.id !== state.location);
-  others.slice(0, 2).forEach(p => {
+  // Travel options
+  PLACES.filter(p => p.id !== state.location).slice(0,2).forEach(p => {
     const btn = document.createElement('button');
     btn.className = 'action-btn';
-    btn.innerHTML = `Go to ${p.name}<br><span class="cost">₦200 · 30min</span>`;
+    btn.innerHTML = `Go to ${p.name}<span class="cost">₦200 · 30min</span>`;
     btn.onclick = () => travelTo(p.id);
     container.appendChild(btn);
   });
@@ -508,252 +653,70 @@ function renderActions() {
   place.actions.forEach(aid => {
     const a = ACTIONS[aid];
     if (!a) return;
-    // Hide work if no job
     if (aid === 'work' && state.job.id === 'none') return;
-    // Hide apply if already have decent job
-    if (aid === 'apply_job' && state.job.level >= 3) return;
 
     const btn = document.createElement('button');
     btn.className = 'action-btn';
     let costStr = a.cost > 0 ? `₦${a.cost.toLocaleString()}` : 'Free';
-    if (a.pay === true) costStr = `+₦${state.job.pay.toLocaleString()}`;
-    if (a.pay === 'okada') costStr = '+₦2,000–4,500';
-    const eff = Object.entries(a.effects || {}).map(([k,v]) => `${v>0?'+':''}${v} ${k}`).join(', ');
-    btn.innerHTML = `${a.label}<br><span class="cost">${costStr} · ${a.duration}h</span><br><span class="effect">${eff}</span>`;
-    btn.disabled = state.busyUntil > now() || (a.cost > 0 && state.money < a.cost);
+    if (aid === 'work') costStr = `+₦${(state.job.pay||0).toLocaleString()}`;
+    if (aid === 'gig_okada') costStr = '+₦2,000–4,500';
+    btn.innerHTML = `${a.label}<span class="cost">${costStr} · ${a.duration}</span><span class="effect">${a.effects}</span>`;
+    btn.disabled = state.busy || (a.cost > 0 && state.money < a.cost);
     btn.onclick = () => doAction(aid);
     container.appendChild(btn);
   });
 }
 
-function updateHeader() {
-  document.getElementById('money-display').textContent = '₦' + state.money.toLocaleString();
-  document.getElementById('job-display').textContent = state.job.name;
-  document.getElementById('day-display').textContent = `Day ${state.day} · ${DAYS[(state.day-1)%7]}`;
-  const h = String(Math.floor(state.hour)).padStart(2,'0');
-  const m = String(Math.floor(state.minute)).padStart(2,'0');
-  document.getElementById('time-display').textContent = `${h}:${m}`;
-  const rentEl = document.getElementById('rent-warning');
-  if (state.rentDue <= 1) rentEl.textContent = `⚠ Rent ₦${state.rentAmount.toLocaleString()} due soon!`;
-  else rentEl.textContent = `Rent in ${state.rentDue} days`;
-}
-
 // ========== ACTIONS ==========
 function selectPlace(id) {
-  // just highlight; travel is separate
-  state.location = id; // for simplicity allow instant select + travel cost on action
-  // Actually better: selecting shows actions including travel
+  // just highlight for now — travel still costs
+  state.location = id;
   renderMap();
   renderActions();
 }
 
 function travelTo(id) {
-  if (state.busyUntil > now()) return;
-  if (state.money < 200) {
-    toast('Not enough money for transport');
-    return;
-  }
-  state.money -= 200;
-  advanceTime(0.5);
-  state.location = id;
-  const place = PLACES.find(p => p.id === id);
-  addLog(`You went to ${place.name}.`);
-  renderMap();
-  renderActions();
-  updateHeader();
-  renderNeeds();
+  if (state.busy) return;
+  if (state.money < 200) return toast('Not enough ₦ for transport');
+  state.busy = true;
+  socket.emit('travel', id);
 }
 
 function doAction(aid) {
-  if (state.busyUntil > now() || state.gameOver) return;
-  const a = ACTIONS[aid];
-  if (!a) return;
-  if (a.cost > 0 && state.money < a.cost) {
-    toast('Not enough ₦');
-    return;
-  }
-
-  state.money -= a.cost || 0;
-
-  // Apply effects
-  if (a.effects) {
-    for (const [k, v] of Object.entries(a.effects)) {
-      if (state.needs[k] !== undefined) {
-        state.needs[k] = Math.max(0, Math.min(100, state.needs[k] + v));
-      }
-    }
-  }
-
-  // Pay
-  if (a.pay === true) {
-    state.money += state.job.pay;
-    addLog(`You earned ₦${state.job.pay.toLocaleString()} from work.`);
-  } else if (a.pay === 'okada') {
-    const earn = 2000 + Math.floor(Math.random() * 2500);
-    state.money += earn;
-    addLog(`Okada gig paid ₦${earn.toLocaleString()}.`);
-  }
-
-  // Special
-  if (a.special === 'job') {
-    tryGetJob();
-  }
-
-  advanceTime(a.duration);
-  addLog(a.msg);
-  toast(a.msg);
-
-  // Social chance with NPCs here
-  const here = state.npcs.filter(n => n.location === state.location);
-  if (here.length && (aid === 'hangout' || aid === 'party')) {
-    const npc = here[Math.floor(Math.random()*here.length)];
-    addLog(`You hung out with ${npc.name}.`);
-    state.needs.social = Math.min(100, state.needs.social + 10);
-  }
-
-  renderNeeds();
-  renderActions();
-  updateHeader();
-  checkDeath();
-}
-
-function tryGetJob() {
-  if (state.job.level >= 4) return;
-  const chance = 0.4 + state.job.level * 0.1;
-  if (Math.random() < chance) {
-    const next = JOBS[Math.min(state.job.level + 1, JOBS.length - 1)];
-    // find next available
-    const idx = JOBS.findIndex(j => j.id === state.job.id);
-    const newJob = JOBS[Math.min(idx + 1, JOBS.length - 1)];
-    if (newJob.id !== state.job.id) {
-      state.job = newJob;
-      addLog(`🎉 You got a new job: ${newJob.name}! Pay: ₦${newJob.pay.toLocaleString()}/shift`);
-      toast(`New job: ${newJob.name}`);
-    } else {
-      addLog('No new openings right now. Try again later.');
-    }
-  } else {
-    addLog('No luck finding better work today.');
-  }
-}
-
-// ========== TIME & NEEDS ==========
-function now() { return state.day * 24 + state.hour + state.minute / 60; }
-
-function advanceTime(hours) {
-  state.busyUntil = now() + hours;
-  let h = state.hour + hours;
-  while (h >= 24) {
-    h -= 24;
-    state.day++;
-    state.rentDue--;
-    // Daily need decay is handled in tick; here just day change
-    if (state.rentDue <= 0) {
-      collectRent();
-    }
-  }
-  state.hour = h;
-  state.minute = (state.minute + (hours % 1) * 60) % 60;
-  updateHeader();
-}
-
-function collectRent() {
-  if (state.money >= state.rentAmount) {
-    state.money -= state.rentAmount;
-    state.rentDue = 7;
-    addLog(`🏠 Rent paid: ₦${state.rentAmount.toLocaleString()}. Next due in 7 days.`);
-    toast('Rent paid!');
-    // small rent increase over time
-    if (state.day > 14) state.rentAmount = Math.floor(state.rentAmount * 1.05);
-  } else {
-    // failed rent
-    endGame(false, 'You couldn\'t pay rent. Landlord locked you out.');
-  }
-  updateHeader();
-}
-
-function tick() {
-  if (state.gameOver) return;
-  // advance ~10 game minutes
-  state.minute += 10;
-  if (state.minute >= 60) {
-    state.minute -= 60;
-    state.hour++;
-    if (state.hour >= 24) {
-      state.hour = 0;
-      state.day++;
-      state.rentDue--;
-      if (state.rentDue <= 0) collectRent();
-    }
-  }
-  // Needs decay
-  state.needs.hunger = Math.max(0, state.needs.hunger - 0.8);
-  state.needs.energy = Math.max(0, state.needs.energy - 0.5);
-  state.needs.fun = Math.max(0, state.needs.fun - 0.4);
-  state.needs.social = Math.max(0, state.needs.social - 0.3);
-  state.needs.hygiene = Math.max(0, state.needs.hygiene - 0.35);
-
-  renderNeeds();
-  updateHeader();
-  checkDeath();
-}
-
-function npcTick() {
-  if (state.gameOver) return;
-  // Move some NPCs
-  state.npcs.forEach(npc => {
-    if (Math.random() < 0.35) {
-      const p = PLACES[Math.floor(Math.random() * PLACES.length)];
-      npc.location = p.id;
-    }
-  });
-  renderMap();
-}
-
-function checkDeath() {
-  const critical = Object.values(state.needs).some(v => v <= 0);
-  if (critical) {
-    const low = Object.entries(state.needs).filter(([k,v]) => v <= 0).map(([k]) => k);
-    endGame(false, `Your ${low.join(' & ')} hit zero. You collapsed.`);
-  }
-}
-
-function endGame(win, msg) {
-  state.gameOver = true;
-  document.getElementById('go-title').textContent = win ? 'You Made It!' : 'Game Over';
-  document.getElementById('go-msg').textContent = msg;
-  document.getElementById('go-stats').innerHTML = `
-    <div class="stat-row"><span>Days survived</span><span>${state.day}</span></div>
-    <div class="stat-row"><span>Final money</span><span>₦${state.money.toLocaleString()}</span></div>
-    <div class="stat-row"><span>Job</span><span>${state.job.name}</span></div>
-  `;
-  document.getElementById('gameover-modal').classList.remove('hidden');
+  if (state.busy) return;
+  state.busy = true;
+  socket.emit('do_action', aid);
 }
 
 // ========== UI HELPERS ==========
 function addLog(msg) {
   state.log.unshift(msg);
-  if (state.log.length > 30) state.log.pop();
-  const el = document.getElementById('log');
-  el.innerHTML = state.log.slice(0, 6).map(m => `<div>• ${m}</div>`).join('');
+  if (state.log.length > 20) state.log.pop();
+  document.getElementById('log').innerHTML = state.log.slice(0,5).map(m => `<div>• ${m}</div>`).join('');
 }
 
 function toast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
+  setTimeout(() => t.classList.remove('show'), 2400);
 }
 
 function showPlayers() {
   const list = document.getElementById('players-list');
-  list.innerHTML = `
-    <div class="player-row"><span class="player-dot" style="background:var(--accent)"></span><strong>${state.name}</strong> (you) · ₦${state.money.toLocaleString()}</div>
-  `;
-  state.npcs.forEach(n => {
-    const pl = PLACES.find(p => p.id === n.location);
-    list.innerHTML += `<div class="player-row"><span class="player-dot" style="background:#5c6bc0"></span>${n.emoji} ${n.name} · at ${pl ? pl.name : '?'} · ₦${n.money.toLocaleString()}</div>`;
+  const me = state.players.find(p => p.name === state.name);
+  let html = '';
+  state.players.forEach(p => {
+    const place = PLACES.find(pl => pl.id === p.location);
+    html += `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:1.2rem">${p.emoji || '🙂'}</span>
+      <div>
+        <strong>${p.name}${p.name === state.name ? ' (you)' : ''}</strong><br>
+        <span style="font-size:0.8rem;color:var(--muted)">${place ? place.name : '?'} · ₦${Number(p.money).toLocaleString()}</span>
+      </div>
+    </div>`;
   });
+  list.innerHTML = html || '<p style="color:var(--muted)">No one else online yet</p>';
   document.getElementById('players-modal').classList.remove('hidden');
 }
 
@@ -761,9 +724,12 @@ function closeModal(id) {
   document.getElementById(id).classList.add('hidden');
 }
 
-// Allow Enter key on start
-document.getElementById('player-name').addEventListener('keydown', e => {
-  if (e.key === 'Enter') startGame();
+// Enter key support
+document.getElementById('password').addEventListener('keydown', e => {
+  if (e.key === 'Enter') handleAuth();
+});
+document.getElementById('confirm-password').addEventListener('keydown', e => {
+  if (e.key === 'Enter') handleAuth();
 });
 </script>
 </body>
