@@ -3,734 +3,378 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Lagos Mini Life</title>
+<title>Lagos Mini Life - Animated Demo</title>
 <style>
-  :root {
-    --bg: #0c1017;
-    --panel: #151c28;
-    --card: #1e2a3a;
-    --border: #2a3748;
-    --text: #eef3f9;
-    --muted: #8b9cb3;
-    --accent: #00e676;
-    --accent-dim: #00c853;
-    --orange: #ff9100;
-    --danger: #ff5252;
-    --purple: #b388ff;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .hidden { display: none !important; }
-
-  /* ========== START SCREEN ========== */
-  #start-screen {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 24px 20px;
-    background: radial-gradient(ellipse at 50% 0%, #1a2a3a 0%, #0c1017 60%);
-  }
-  #start-screen h1 {
-    font-size: 2.1rem;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    background: linear-gradient(135deg, #00e676, #69f0ae);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 6px;
-  }
-  .tagline {
-    color: var(--muted);
-    font-size: 0.9rem;
-    margin-bottom: 28px;
-    text-align: center;
-  }
-  .auth-card {
-    width: 100%;
-    max-width: 360px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 24px 20px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
-  }
-  .tabs {
-    display: flex;
-    background: var(--card);
-    border-radius: 12px;
-    padding: 4px;
-    margin-bottom: 22px;
-  }
-  .tab {
-    flex: 1;
-    text-align: center;
-    padding: 10px;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .tab.active {
-    background: var(--accent);
-    color: #003d1a;
-  }
-  .input-group {
-    margin-bottom: 14px;
-  }
-  .input-group label {
-    display: block;
-    font-size: 0.78rem;
-    color: var(--muted);
-    margin-bottom: 6px;
-    font-weight: 500;
-  }
-  input[type="text"], input[type="password"] {
-    width: 100%;
-    padding: 13px 14px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    background: var(--card);
-    color: var(--text);
-    font-size: 1rem;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  input:focus { border-color: var(--accent); }
-  .btn {
-    width: 100%;
-    background: var(--accent);
-    color: #003d1a;
-    border: none;
-    padding: 15px;
-    border-radius: 14px;
-    font-weight: 700;
-    font-size: 1.05rem;
-    cursor: pointer;
-    margin-top: 8px;
-    transition: transform 0.15s, opacity 0.15s;
-  }
-  .btn:active { transform: scale(0.97); }
-  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-  .error-msg {
-    color: var(--danger);
-    font-size: 0.82rem;
-    margin-top: 12px;
-    text-align: center;
-    min-height: 20px;
-  }
-  .footer-note {
-    margin-top: 20px;
-    font-size: 0.75rem;
-    color: var(--muted);
-    text-align: center;
-  }
-
-  /* ========== GAME ========== */
-  #game {
-    display: flex;
-    flex-direction: column;
+    background: #0a0f18;
+    color: white;
+    font-family: system-ui, sans-serif;
     height: 100vh;
-    max-width: 480px;
-    margin: 0 auto;
-    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    touch-action: none;
   }
   header {
-    background: var(--panel);
-    padding: 12px 16px;
+    padding: 11px 16px;
+    background: #111827;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
+    border-bottom: 1px solid #1f2a3a;
+    z-index: 40;
   }
-  .money {
-    font-weight: 800;
-    color: var(--accent);
-    font-size: 1.25rem;
-  }
-  .job-label {
-    font-size: 0.75rem;
-    color: var(--muted);
-    margin-top: 1px;
-  }
-  .day-info {
-    text-align: right;
-    font-size: 0.85rem;
-  }
-  .rent-warn {
-    font-size: 0.72rem;
-    color: var(--orange);
-    margin-top: 2px;
-  }
-
-  /* Needs */
-  .needs-bar {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 6px;
-    padding: 10px 12px;
-    background: var(--panel);
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
-  }
-  .need {
-    background: var(--card);
-    border-radius: 10px;
-    padding: 7px 6px;
-    text-align: center;
-  }
-  .need-name {
-    font-size: 0.65rem;
-    color: var(--muted);
-    margin-bottom: 4px;
-  }
-  .need-val {
-    font-size: 0.8rem;
-    font-weight: 700;
-  }
-  .need-fill {
-    height: 4px;
-    background: #2a3545;
-    border-radius: 2px;
-    margin-top: 4px;
+  .money { color: #00e676; font-weight: 700; font-size: 1.15rem; }
+  #map-container {
+    flex: 1;
+    position: relative;
+    background: #0c121c;
     overflow: hidden;
   }
-  .need-fill > div {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 0.35s;
-  }
-
-  /* Map - denser card grid */
-  .map-area {
-    flex: 1;
-    overflow-y: auto;
-    padding: 12px;
-    background: #0f1520;
-  }
-  .places-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
-  .place-card {
-    background: var(--card);
-    border: 2px solid var(--border);
-    border-radius: 16px;
-    padding: 14px 12px;
-    cursor: pointer;
-    transition: all 0.18s;
-    position: relative;
-  }
-  .place-card.selected {
-    border-color: var(--accent);
-    background: #1a2f28;
-    box-shadow: 0 0 0 1px var(--accent);
-  }
-  .place-card .emoji {
-    font-size: 1.6rem;
-    margin-bottom: 4px;
-  }
-  .place-card .name {
-    font-weight: 700;
-    font-size: 0.9rem;
-  }
-  .place-card .players-here {
+  .road {
     position: absolute;
-    top: 8px;
-    right: 8px;
-    display: flex;
-    gap: 2px;
+    background: #1e293b;
+    border-radius: 5px;
+    z-index: 1;
   }
-  .place-card .players-here span {
-    font-size: 0.85rem;
-    background: rgba(0,0,0,0.35);
+  .road-h { height: 18px; }
+  .road-v { width: 18px; }
+  .tree {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: #166534;
     border-radius: 50%;
-    width: 22px;
-    height: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    z-index: 3;
+    box-shadow: 0 0 0 4px #14532d;
   }
-
-  /* Action panel */
-  .action-panel {
-    background: var(--panel);
-    border-top: 1px solid var(--border);
-    padding: 14px 14px 18px;
-    flex-shrink: 0;
-    max-height: 46vh;
-    overflow-y: auto;
+  /* Buildings */
+  .location {
+    position: absolute;
+    width: 90px;
+    text-align: center;
+    z-index: 6;
+    pointer-events: none;
   }
-  .action-panel h3 {
-    font-size: 1rem;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .building {
+    width: 70px;
+    height: 58px;
+    margin: 0 auto 5px;
+    position: relative;
+    border-radius: 5px 5px 3px 3px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.45);
   }
-  .actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 9px;
+  .b-home {
+    background: linear-gradient(145deg, #60a5fa, #1d4ed8);
   }
-  .action-btn {
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 12px 10px;
-    border-radius: 14px;
-    font-size: 0.82rem;
-    cursor: pointer;
-    text-align: left;
-    transition: background 0.15s;
-  }
-  .action-btn:active:not(:disabled) { background: #2a3b52; }
-  .action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  .action-btn .cost {
-    display: block;
-    color: var(--orange);
-    font-size: 0.75rem;
-    margin-top: 3px;
-  }
-  .action-btn .effect {
-    display: block;
-    color: var(--muted);
-    font-size: 0.7rem;
-    margin-top: 2px;
-  }
-  .log {
-    margin-top: 12px;
-    background: var(--card);
-    border-radius: 12px;
-    padding: 10px 12px;
-    font-size: 0.78rem;
-    color: var(--muted);
-    max-height: 72px;
-    overflow-y: auto;
-  }
-  .log div { margin-bottom: 3px; }
-
-  /* Toast & Modals */
-  .toast {
-    position: fixed;
-    bottom: 24px;
+  .b-home .door {
+    position: absolute;
+    bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    background: var(--accent);
-    color: #003d1a;
-    padding: 12px 22px;
-    border-radius: 30px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    z-index: 100;
-    opacity: 0;
-    transition: opacity 0.3s;
-    pointer-events: none;
-    max-width: 90%;
-    text-align: center;
+    width: 16px;
+    height: 26px;
+    background: #78350f;
+    border-radius: 3px 3px 0 0;
   }
-  .toast.show { opacity: 1; }
-  .modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.75);
+  .b-home .door::after {
+    content: '';
+    position: absolute;
+    top: 12px;
+    right: 3px;
+    width: 4px;
+    height: 4px;
+    background: #fbbf24;
+    border-radius: 50%;
+  }
+  .window {
+    position: absolute;
+    width: 11px;
+    height: 11px;
+    background: #fef08a;
+    border-radius: 2px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.2);
+  }
+  .b-market { background: linear-gradient(145deg, #f59e0b, #b45309); }
+  .b-office { background: linear-gradient(145deg, #64748b, #334155); }
+  .b-amala  { background: linear-gradient(145deg, #ef4444, #991b1b); }
+  .b-beach  { background: linear-gradient(145deg, #06b6d4, #0e7490); }
+  .b-church { background: linear-gradient(145deg, #a855f7, #6b21a8); }
+  .b-club   { background: linear-gradient(145deg, #ec4899, #9d174d); }
+  .b-okada  { background: linear-gradient(145deg, #84cc16, #4d7c0f); }
+
+  .building::before {
+    content: '';
+    position: absolute;
+    top: -11px;
+    left: 6px;
+    right: 6px;
+    height: 13px;
+    background: inherit;
+    filter: brightness(1.18);
+    border-radius: 4px 4px 0 0;
+  }
+  .building::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 11px;
+    background: rgba(0,0,0,0.32);
+    border-radius: 50%;
+    filter: blur(2px);
+  }
+  .loc-name {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    text-shadow: 0 1px 3px black;
+  }
+  /* Player with walk animation */
+  #player {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    background: #00e676;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 0 14px #00e676;
+    z-index: 20;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 13px;
+    left: 50%;
+    top: 60%;
+    transform: translate(-50%, -50%);
+  }
+  #player.walking {
+    animation: walkBob 0.35s infinite alternate;
+  }
+  @keyframes walkBob {
+    from { transform: translate(-50%, -50%) translateY(0); }
+    to   { transform: translate(-50%, -50%) translateY(-4px); }
+  }
+  /* Cars */
+  .car {
+    position: absolute;
+    width: 28px;
+    height: 14px;
+    border-radius: 4px;
+    z-index: 8;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  }
+  .car::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 4px;
+    width: 8px;
+    height: 6px;
+    background: rgba(255,255,255,0.35);
+    border-radius: 2px;
+  }
+  /* Controls */
+  .controls {
+    position: absolute;
+    bottom: 28px;
+    right: 18px;
+    width: 140px;
+    height: 140px;
     z-index: 50;
-    padding: 20px;
   }
-  .modal-content {
-    background: var(--panel);
-    border-radius: 20px;
-    padding: 24px;
-    max-width: 340px;
-    width: 100%;
-    border: 1px solid var(--border);
-  }
-  .modal-content h2 { margin-bottom: 10px; font-size: 1.3rem; }
-  .modal-content p { color: var(--muted); margin-bottom: 16px; font-size: 0.9rem; line-height: 1.45; }
-  .btn-secondary {
-    background: var(--card);
-    color: var(--text);
-    border: 1px solid var(--border);
-  }
-  .stat-row {
+  .ctrl-btn {
+    position: absolute;
+    width: 46px;
+    height: 46px;
+    background: rgba(30,41,59,0.92);
+    border: 1px solid #334155;
+    border-radius: 14px;
+    color: white;
+    font-size: 1.25rem;
     display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.9rem;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+  }
+  .ctrl-btn:active { background: #00e676; color: #003d1a; }
+  .up    { top: 0; left: 47px; }
+  .down  { bottom: 0; left: 47px; }
+  .left  { top: 47px; left: 0; }
+  .right { top: 47px; right: 0; }
+  .info {
+    position: absolute;
+    bottom: 28px;
+    left: 14px;
+    background: rgba(17,24,39,0.92);
+    padding: 8px 14px;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    border: 1px solid #2a3a4f;
+    z-index: 50;
   }
 </style>
 </head>
 <body>
-
-<!-- ========== START SCREEN ========== -->
-<div id="start-screen">
-  <h1>Lagos Mini Life</h1>
-  <p class="tagline">Survive rent. Hustle. Live Lagos.</p>
-
-  <div class="auth-card">
-    <div class="tabs">
-      <div class="tab active" id="tab-login" onclick="switchTab('login')">Login</div>
-      <div class="tab" id="tab-register" onclick="switchTab('register')">Register</div>
-    </div>
-
-    <div class="input-group">
-      <label>Username</label>
-      <input type="text" id="username" placeholder="e.g. Tunde" maxlength="16" autocomplete="username">
-    </div>
-    <div class="input-group">
-      <label>Password</label>
-      <input type="password" id="password" placeholder="••••••" maxlength="32" autocomplete="current-password">
-    </div>
-    <div class="input-group hidden" id="confirm-group">
-      <label>Confirm Password</label>
-      <input type="password" id="confirm-password" placeholder="••••••" maxlength="32">
-    </div>
-
-    <button class="btn" id="auth-btn" onclick="handleAuth()">Enter Lagos</button>
-    <div class="error-msg" id="auth-error"></div>
-  </div>
-
-  <p class="footer-note">Progress is saved · No email needed</p>
-</div>
-
-<!-- ========== GAME ========== -->
-<div id="game" class="hidden">
   <header>
     <div>
-      <div class="money" id="money-display">₦0</div>
-      <div class="job-label" id="job-display">Unemployed</div>
+      <div class="money">₦15,000</div>
+      <div style="font-size:0.75rem;color:#94a3b8">Animated Demo</div>
     </div>
-    <div class="day-info">
-      <div id="day-display">Day 1 · Mon</div>
-      <div id="time-display">08:00</div>
-      <div class="rent-warn" id="rent-warning">Rent in 3 days</div>
-    </div>
+    <div style="font-size:0.85rem;color:#94a3b8">Walk + Cars</div>
   </header>
 
-  <div class="needs-bar" id="needs-bar"></div>
+  <div id="map-container">
+    <!-- Roads -->
+    <div class="road road-h" style="left:10%; top:48%; width:65%;"></div>
+    <div class="road road-h" style="left:20%; top:29%; width:52%;"></div>
+    <div class="road road-v" style="left:48%; top:20%; height:52%;"></div>
+    <div class="road road-v" style="left:27%; top:36%; height:34%;"></div>
+    <div class="road road-h" style="left:36%; top:68%; width:40%;"></div>
 
-  <div class="map-area">
-    <div class="places-grid" id="places-grid"></div>
+    <!-- Trees -->
+    <div class="tree" style="left:33%; top:37%;"></div>
+    <div class="tree" style="left:59%; top:25%;"></div>
+    <div class="tree" style="left:70%; top:51%;"></div>
+    <div class="tree" style="left:41%; top:57%;"></div>
+    <div class="tree" style="left:23%; top:54%;"></div>
+    <div class="tree" style="left:77%; top:38%;"></div>
+    <div class="tree" style="left:53%; top:74%;"></div>
+    <div class="tree" style="left:16%; top:33%;"></div>
+
+    <div id="player">🙂</div>
+
+    <div class="info">Use arrows to walk</div>
+
+    <div class="controls">
+      <div class="ctrl-btn up"    id="btn-up">↑</div>
+      <div class="ctrl-btn down"  id="btn-down">↓</div>
+      <div class="ctrl-btn left"  id="btn-left">←</div>
+      <div class="ctrl-btn right" id="btn-right">→</div>
+    </div>
   </div>
 
-  <div class="action-panel">
-    <h3>
-      <span id="location-title">Select a place</span>
-      <button class="btn btn-secondary" style="width:auto;padding:7px 12px;font-size:0.8rem;margin:0" onclick="showPlayers()">Players</button>
-    </h3>
-    <div class="actions" id="actions"></div>
-    <div class="log" id="log"></div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<!-- Players Modal -->
-<div id="players-modal" class="modal hidden">
-  <div class="modal-content">
-    <h2>People in the city</h2>
-    <div id="players-list" style="max-height:220px;overflow-y:auto;margin:12px 0"></div>
-    <button class="btn btn-secondary" style="width:100%" onclick="closeModal('players-modal')">Close</button>
-  </div>
-</div>
-
-<!-- Game Over -->
-<div id="gameover-modal" class="modal hidden">
-  <div class="modal-content">
-    <h2 id="go-title">Game Over</h2>
-    <p id="go-msg"></p>
-    <div id="go-stats"></div>
-    <button class="btn" style="width:100%;margin-top:16px" onclick="location.reload()">Play Again</button>
-  </div>
-</div>
-
-<script src="/socket.io/socket.io.js"></script>
 <script>
-// ========== AUTH TABS ==========
-let currentTab = 'login';
-function switchTab(tab) {
-  currentTab = tab;
-  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
-  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
-  document.getElementById('confirm-group').classList.toggle('hidden', tab === 'login');
-  document.getElementById('auth-error').textContent = '';
-  document.getElementById('auth-btn').textContent = tab === 'login' ? 'Enter Lagos' : 'Create Account';
+const player = document.getElementById('player');
+const container = document.getElementById('map-container');
+
+let x = 50, y = 60;
+const speed = 1.15;
+const keys = { up:false, down:false, left:false, right:false };
+
+// Controls
+['up','down','left','right'].forEach(dir => {
+  const btn = document.getElementById('btn-' + dir);
+  const start = e => { e.preventDefault(); keys[dir] = true; };
+  const end   = () => keys[dir] = false;
+  btn.addEventListener('touchstart', start);
+  btn.addEventListener('touchend', end);
+  btn.addEventListener('mousedown', start);
+  btn.addEventListener('mouseup', end);
+  btn.addEventListener('mouseleave', end);
+});
+
+window.addEventListener('keydown', e => {
+  if (e.key === 'ArrowUp') keys.up = true;
+  if (e.key === 'ArrowDown') keys.down = true;
+  if (e.key === 'ArrowLeft') keys.left = true;
+  if (e.key === 'ArrowRight') keys.right = true;
+});
+window.addEventListener('keyup', e => {
+  if (e.key === 'ArrowUp') keys.up = false;
+  if (e.key === 'ArrowDown') keys.down = false;
+  if (e.key === 'ArrowLeft') keys.left = false;
+  if (e.key === 'ArrowRight') keys.right = false;
+});
+
+function update() {
+  let moving = false;
+  if (keys.up)    { y = Math.max(8, y - speed); moving = true; }
+  if (keys.down)  { y = Math.min(90, y + speed); moving = true; }
+  if (keys.left)  { x = Math.max(5, x - speed); moving = true; }
+  if (keys.right) { x = Math.min(95, x + speed); moving = true; }
+
+  player.style.left = x + '%';
+  player.style.top  = y + '%';
+  player.classList.toggle('walking', moving);
+
+  requestAnimationFrame(update);
 }
+update();
 
-// ========== SOCKET + STATE ==========
-const socket = io();
-let state = {
-  name: '',
-  money: 0,
-  job: { id: 'none', name: 'Unemployed', pay: 0 },
-  day: 1,
-  hour: 8,
-  minute: 0,
-  needs: { hunger: 70, energy: 80, fun: 50, social: 40, hygiene: 60 },
-  location: 'home',
-  rentDue: 3,
-  rentAmount: 8000,
-  players: [],
-  log: [],
-  busy: false
-};
-
-const PLACES = [
-  { id: 'home',   name: 'Your Room',      emoji: '🏠', actions: ['sleep','cook','shower','rest'] },
-  { id: 'market', name: 'Balogun Market', emoji: '🛒', actions: ['shop_food','hangout'] },
-  { id: 'office', name: 'Victoria Island',emoji: '🏢', actions: ['work','apply_job'] },
-  { id: 'amala',  name: 'Amala Spot',     emoji: '🍲', actions: ['eat_out','hangout'] },
-  { id: 'beach',  name: 'Elegushi Beach', emoji: '🏖️', actions: ['party','hangout','rest'] },
-  { id: 'church', name: 'Church',         emoji: '⛪', actions: ['pray','hangout'] },
-  { id: 'club',   name: 'Quilox',         emoji: '🎉', actions: ['party','hangout'] },
-  { id: 'garage', name: 'Okada Stand',    emoji: '🛵', actions: ['gig_okada','hangout'] },
+// Buildings
+const locations = [
+  { name: 'Your Room',   cls: 'b-home',   x: 15, y: 71, hasDoor: true },
+  { name: 'Balogun',     cls: 'b-market', x: 37, y: 19 },
+  { name: 'VI Office',   cls: 'b-office', x: 75, y: 14 },
+  { name: 'Amala Spot',  cls: 'b-amala',  x: 57, y: 45 },
+  { name: 'Elegushi',    cls: 'b-beach',  x: 83, y: 65 },
+  { name: 'Church',      cls: 'b-church', x: 45, y: 81 },
+  { name: 'Quilox',      cls: 'b-club',   x: 65, y: 32 },
+  { name: 'Okada Stand', cls: 'b-okada',  x: 21, y: 42 },
 ];
 
-const ACTIONS = {
-  sleep:     { label: 'Sleep',          cost: 0,    duration: '6h',  effects: '+70 energy' },
-  cook:      { label: 'Cook & Eat',     cost: 800,  duration: '1h',  effects: '+50 hunger' },
-  shower:    { label: 'Shower',         cost: 0,    duration: '30m', effects: '+60 hygiene' },
-  rest:      { label: 'Rest a bit',     cost: 0,    duration: '1h',  effects: '+20 energy, +5 fun' },
-  shop_food: { label: 'Buy groceries',  cost: 2500, duration: '1h',  effects: '+10 hunger' },
-  eat_out:   { label: 'Chop amala',     cost: 1500, duration: '1h',  effects: '+55 hunger, +15 fun' },
-  work:      { label: 'Work a shift',   cost: 0,    duration: '4h',  effects: 'Earn salary' },
-  apply_job: { label: 'Look for work',  cost: 0,    duration: '1h',  effects: 'Chance of job' },
-  hangout:   { label: 'Hang with people',cost: 500, duration: '1.5h',effects: '+40 social, +25 fun' },
-  party:     { label: 'Party hard',     cost: 5000, duration: '3h',  effects: '+60 fun, +30 social' },
-  pray:      { label: 'Pray / Reflect', cost: 0,    duration: '1h',  effects: '+15 fun, +10 energy' },
-  gig_okada: { label: 'Okada gig',      cost: 0,    duration: '2h',  effects: 'Earn ₦2k–4.5k' },
-};
+locations.forEach(loc => {
+  const el = document.createElement('div');
+  el.className = 'location';
+  el.style.left = loc.x + '%';
+  el.style.top = loc.y + '%';
+  el.style.transform = 'translate(-50%, -50%)';
 
-const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-
-// ========== AUTH ==========
-function handleAuth() {
-  const name = document.getElementById('username').value.trim();
-  const password = document.getElementById('password').value;
-  const confirm = document.getElementById('confirm-password').value;
-  const err = document.getElementById('auth-error');
-
-  if (name.length < 2) return err.textContent = 'Username must be at least 2 characters';
-  if (password.length < 3) return err.textContent = 'Password must be at least 3 characters';
-  if (currentTab === 'register' && password !== confirm) return err.textContent = 'Passwords do not match';
-
-  err.textContent = '';
-  document.getElementById('auth-btn').disabled = true;
-  document.getElementById('auth-btn').textContent = 'Entering...';
-
-  socket.emit('join', { name, password });
-}
-
-socket.on('error_msg', (msg) => {
-  document.getElementById('auth-error').textContent = msg;
-  document.getElementById('auth-btn').disabled = false;
-  document.getElementById('auth-btn').textContent = currentTab === 'login' ? 'Enter Lagos' : 'Create Account';
-});
-
-socket.on('joined', (data) => {
-  state.name = data.you.name;
-  state.money = data.you.money;
-  state.job = data.you.job || { id: 'none', name: 'Unemployed', pay: 0 };
-  state.location = data.you.location || 'home';
-  state.needs = data.you.needs || state.needs;
-
-  document.getElementById('start-screen').classList.add('hidden');
-  document.getElementById('game').classList.remove('hidden');
-  renderAll();
-  addLog(`Welcome to Lagos, ${state.name}. Rent is ₦${state.rentAmount.toLocaleString()}. Hustle hard.`);
-});
-
-// ========== CITY UPDATES ==========
-socket.on('city_update', (data) => {
-  state.players = data.players || [];
-  state.day = data.day || state.day;
-  state.hour = data.hour ?? state.hour;
-  state.minute = data.minute ?? state.minute;
-  renderMap();
-  updateHeader();
-});
-
-socket.on('action_result', (res) => {
-  if (res.money !== undefined) state.money = res.money;
-  if (res.needs) state.needs = res.needs;
-  if (res.job) state.job = res.job;
-  if (res.location) state.location = res.location;
-  if (res.msg) {
-    addLog(res.msg);
-    toast(res.msg);
+  let extra = '';
+  if (loc.hasDoor) {
+    extra = `<div class="door"></div>
+             <div class="window" style="top:10px;left:9px"></div>
+             <div class="window" style="top:10px;right:9px"></div>`;
+  } else {
+    extra = `<div class="window" style="top:12px;left:10px"></div>
+             <div class="window" style="top:12px;right:10px"></div>
+             <div class="window" style="top:28px;left:10px"></div>
+             <div class="window" style="top:28px;right:10px"></div>`;
   }
-  state.busy = false;
-  renderAll();
+
+  el.innerHTML = `
+    <div class="building ${loc.cls}">${extra}</div>
+    <div class="loc-name">${loc.name}</div>
+  `;
+  container.appendChild(el);
 });
 
-// ========== RENDER ==========
-function renderAll() {
-  updateHeader();
-  renderNeeds();
-  renderMap();
-  renderActions();
-}
+// Moving cars
+const cars = [
+  { el: null, x: 15, y: 48, dir: 1, speed: 0.35, color: '#eab308' },
+  { el: null, x: 70, y: 29, dir: -1, speed: 0.28, color: '#ef4444' },
+  { el: null, x: 48, y: 25, dir: 1, speed: 0.32, color: '#3b82f6', vertical: true },
+];
 
-function updateHeader() {
-  document.getElementById('money-display').textContent = '₦' + Number(state.money).toLocaleString();
-  document.getElementById('job-display').textContent = state.job.name || 'Unemployed';
-  document.getElementById('day-display').textContent = `Day ${state.day} · ${DAYS[(state.day-1)%7]}`;
-  const h = String(Math.floor(state.hour)).padStart(2,'0');
-  const m = String(Math.floor(state.minute)).padStart(2,'0');
-  document.getElementById('time-display').textContent = `${h}:${m}`;
-  const rentEl = document.getElementById('rent-warning');
-  if (state.rentDue <= 1) rentEl.textContent = `⚠ Rent ₦${state.rentAmount.toLocaleString()} due!`;
-  else rentEl.textContent = `Rent in ${state.rentDue} days`;
-}
-
-function renderNeeds() {
-  const bar = document.getElementById('needs-bar');
-  const labels = { hunger: 'Hunger', energy: 'Energy', fun: 'Fun', social: 'Social', hygiene: 'Hygiene' };
-  const colors = { hunger: '#ff9800', energy: '#42a5f5', fun: '#ec407a', social: '#ab47bc', hygiene: '#26c6da' };
-  bar.innerHTML = '';
-  for (const [k, v] of Object.entries(state.needs)) {
-    const pct = Math.max(0, Math.min(100, Math.round(v)));
-    const col = pct < 25 ? 'var(--danger)' : colors[k];
-    bar.innerHTML += `
-      <div class="need">
-        <div class="need-name">${labels[k]}</div>
-        <div class="need-val" style="color:${col}">${pct}</div>
-        <div class="need-fill"><div style="width:${pct}%;background:${col}"></div></div>
-      </div>`;
-  }
-}
-
-function renderMap() {
-  const grid = document.getElementById('places-grid');
-  grid.innerHTML = '';
-  PLACES.forEach(p => {
-    const here = state.players.filter(pl => pl.location === p.id);
-    const isMe = state.location === p.id;
-    const card = document.createElement('div');
-    card.className = 'place-card' + (isMe ? ' selected' : '');
-    card.innerHTML = `
-      <div class="emoji">${p.emoji}</div>
-      <div class="name">${p.name}</div>
-      <div class="players-here">${here.slice(0,3).map(pl => `<span title="${pl.name}">${pl.emoji || '🙂'}</span>`).join('')}</div>
-    `;
-    card.onclick = () => selectPlace(p.id);
-    grid.appendChild(card);
-  });
-}
-
-function renderActions() {
-  const place = PLACES.find(p => p.id === state.location);
-  document.getElementById('location-title').textContent = place ? `${place.emoji} ${place.name}` : 'Select a place';
-  const container = document.getElementById('actions');
-  container.innerHTML = '';
-  if (!place) return;
-
-  // Travel options
-  PLACES.filter(p => p.id !== state.location).slice(0,2).forEach(p => {
-    const btn = document.createElement('button');
-    btn.className = 'action-btn';
-    btn.innerHTML = `Go to ${p.name}<span class="cost">₦200 · 30min</span>`;
-    btn.onclick = () => travelTo(p.id);
-    container.appendChild(btn);
-  });
-
-  place.actions.forEach(aid => {
-    const a = ACTIONS[aid];
-    if (!a) return;
-    if (aid === 'work' && state.job.id === 'none') return;
-
-    const btn = document.createElement('button');
-    btn.className = 'action-btn';
-    let costStr = a.cost > 0 ? `₦${a.cost.toLocaleString()}` : 'Free';
-    if (aid === 'work') costStr = `+₦${(state.job.pay||0).toLocaleString()}`;
-    if (aid === 'gig_okada') costStr = '+₦2,000–4,500';
-    btn.innerHTML = `${a.label}<span class="cost">${costStr} · ${a.duration}</span><span class="effect">${a.effects}</span>`;
-    btn.disabled = state.busy || (a.cost > 0 && state.money < a.cost);
-    btn.onclick = () => doAction(aid);
-    container.appendChild(btn);
-  });
-}
-
-// ========== ACTIONS ==========
-function selectPlace(id) {
-  // just highlight for now — travel still costs
-  state.location = id;
-  renderMap();
-  renderActions();
-}
-
-function travelTo(id) {
-  if (state.busy) return;
-  if (state.money < 200) return toast('Not enough ₦ for transport');
-  state.busy = true;
-  socket.emit('travel', id);
-}
-
-function doAction(aid) {
-  if (state.busy) return;
-  state.busy = true;
-  socket.emit('do_action', aid);
-}
-
-// ========== UI HELPERS ==========
-function addLog(msg) {
-  state.log.unshift(msg);
-  if (state.log.length > 20) state.log.pop();
-  document.getElementById('log').innerHTML = state.log.slice(0,5).map(m => `<div>• ${m}</div>`).join('');
-}
-
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2400);
-}
-
-function showPlayers() {
-  const list = document.getElementById('players-list');
-  const me = state.players.find(p => p.name === state.name);
-  let html = '';
-  state.players.forEach(p => {
-    const place = PLACES.find(pl => pl.id === p.location);
-    html += `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
-      <span style="font-size:1.2rem">${p.emoji || '🙂'}</span>
-      <div>
-        <strong>${p.name}${p.name === state.name ? ' (you)' : ''}</strong><br>
-        <span style="font-size:0.8rem;color:var(--muted)">${place ? place.name : '?'} · ₦${Number(p.money).toLocaleString()}</span>
-      </div>
-    </div>`;
-  });
-  list.innerHTML = html || '<p style="color:var(--muted)">No one else online yet</p>';
-  document.getElementById('players-modal').classList.remove('hidden');
-}
-
-function closeModal(id) {
-  document.getElementById(id).classList.add('hidden');
-}
-
-// Enter key support
-document.getElementById('password').addEventListener('keydown', e => {
-  if (e.key === 'Enter') handleAuth();
+cars.forEach((car, i) => {
+  const el = document.createElement('div');
+  el.className = 'car';
+  el.style.background = car.color;
+  el.style.left = car.x + '%';
+  el.style.top = car.y + '%';
+  container.appendChild(el);
+  car.el = el;
 });
-document.getElementById('confirm-password').addEventListener('keydown', e => {
-  if (e.key === 'Enter') handleAuth();
-});
+
+function moveCars() {
+  cars.forEach(car => {
+    if (car.vertical) {
+      car.y += car.dir * car.speed;
+      if (car.y > 70 || car.y < 22) car.dir *= -1;
+    } else {
+      car.x += car.dir * car.speed;
+      if (car.x > 75 || car.x < 12) car.dir *= -1;
+    }
+    car.el.style.left = car.x + '%';
+    car.el.style.top = car.y + '%';
+  });
+  requestAnimationFrame(moveCars);
+}
+moveCars();
 </script>
 </body>
 </html>
